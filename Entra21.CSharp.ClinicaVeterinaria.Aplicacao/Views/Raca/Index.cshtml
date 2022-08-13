@@ -1,0 +1,26 @@
+﻿<h1>Lista de Raças</h1>
+
+<div>
+	<a href="/raca/cadastrar">Cadastrar</a>
+</div>
+
+<table>
+	<thead> <!-- Cabeçalho da tabela-->
+	<tr> <!--Linha da tabela-->
+		<th>Código</th> <!-- Coluna especifica do cabeçalho -->
+		<th>Nome</th>
+		<th>Espécie</th>
+	</tr>
+	</thead>
+	<tbody> <!-- Lugar dos registros da tabela -->
+		@foreach (var raca in ViewBag.Racas)
+		{
+		   <tr>
+			 <td>@raca.Id</td>
+			 <td>@raca.Nome</td>
+			 <td>@raca.Especie</td>
+		   </tr>
+        }
+
+	</tbody>
+</table>
