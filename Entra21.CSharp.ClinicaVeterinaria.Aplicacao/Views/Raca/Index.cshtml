@@ -18,6 +18,7 @@
             <th>Código</th> <!-- Coluna especifica do cabeçalho -->
             <th>Nome</th>
             <th>Espécie</th>
+            <th>Ação</th>
         </tr>
     </thead>
     <tbody>
@@ -29,7 +30,12 @@
                 <td>@raca.Id</td> <!-- Coluna especifica para body -->
                 <td>@raca.Nome</td>
                 <td>@raca.Especie</td>
+                <td>
+                    <a href="/raca/editar?id=@raca.Id">Editar</a>
+                    <a href="/raca/apagar?id=@raca.Id">Apagar</a>
+                </td>
             </tr>
         }
+
     </tbody>
 </table>
