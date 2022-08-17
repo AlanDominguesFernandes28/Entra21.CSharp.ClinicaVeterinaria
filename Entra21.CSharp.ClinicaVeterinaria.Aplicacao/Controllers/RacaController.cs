@@ -22,13 +22,13 @@ namespace Entra21.CSharp.ClinicaVeterinaria.Aplicacao.Controllers
         /// <returns>Retorna a página html com as raças</returns>
         [Route("/raca")]
         [HttpGet]
-
         public IActionResult ObterTodos()
         {
             var racas = _racaServico.ObterTodos();
 
-            // passar informacoes do c# para HTML
+            //Passar informação do C# para HTML
             ViewBag.Racas = racas;
+
             return View("Index");
         }
 

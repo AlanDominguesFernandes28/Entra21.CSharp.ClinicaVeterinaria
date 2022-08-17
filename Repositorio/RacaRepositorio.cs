@@ -13,20 +13,28 @@ namespace Entra21.CSharp.ClinicaVeterinaria.Repositorio
 
         public void Apagar(int id)
         {
-            var raca = _contexto.Racas.Where(X => X.Id == id).FirstOrDefault();
+           var raca = _contexto.Racas.Where(x => x.Id == id).FirstOrDefault();
 
             _contexto.Racas.Remove(raca);
         }
 
+        public Raca ObterPorId(int id)
+        {
+            var raca = _contexto.Racas.Where(x => x.Id == id).FirstOrDefault();
+
+            return raca;
+        }
+
         public void Atualizar(Raca racaParaAlterar)
         {
-            var raca = _contexto.Racas.Where(X => X.Id == racaParaAlterar.Id).FirstOrDefault();
+            var raca = _contexto.Racas
+                .Where(x => x.Id == racaParaAlterar.Id).FirstOrDefault();
 
-            raca.Nome = racaParaAlterar.Nome; raca.Especie = racaParaAlterar.Especie;
+            raca.Nome = racaParaAlterar.Nome;
+            raca.Especie = racaParaAlterar.Especie;
 
             _contexto.Update(raca);
         }
-
 
         public void Cadastrar(Raca raca)
         {
@@ -35,18 +43,12 @@ namespace Entra21.CSharp.ClinicaVeterinaria.Repositorio
             _contexto.SaveChanges();
         }
 
-        public Raca ObterPorId(int id)
-        {
-            var raca = _contexto.Racas.Where(X => X.Id == id).FirstOrDefault();
-
-            return raca;
-        }
-
         public List<Raca> ObterTodos()
         {
-            // select * from racas
-            //buscar todos os registros de racas
+            // Buscar todos os registros de raças
+            // SELECT * FROM racas
             var racas = _contexto.Racas.ToList();
+
             return racas;
         }
     }
