@@ -1,6 +1,7 @@
 ﻿using Entra21.CSharp.ClinicaVeterinaria.Repositorio;
 using Entra21.CSharp.ClinicaVeterinaria.Repositorio.BancoDados;
 using Entra21.CSharp.ClinicaVeterinaria.Repositorio.Entidades;
+using Entra21.CSharp.ClinicaVeterinaria.Servico.ViewModel;
 
 namespace Entra21.CSharp.ClinicaVeterinaria.Servico
 {
@@ -8,7 +9,7 @@ namespace Entra21.CSharp.ClinicaVeterinaria.Servico
     // ou seja, deverá honrar as clausulas definidos no interface(contrato)
     public class RacaServico : IRacaServico
     {
-        private RacaRepositorio _racasRepositorio;
+        private IRacaRepositorio _racasRepositorio;
 
         // Construtor: Construir de racaServiço com o minimo para a correta execução
         public RacaServico(ClinicaVeterinariaContexto contexto)
@@ -16,12 +17,12 @@ namespace Entra21.CSharp.ClinicaVeterinaria.Servico
             _racasRepositorio = new RacaRepositorio(contexto);
         }
 
-        public void Alterar(int id, string nome, string especie)
+        public void Editar(RacaEditarViewModel racaEditarViewModel)
         {
             var raca = new Raca();
-            raca.Id = id;
-            raca.Nome = nome;
-            raca.Especie = especie;
+            raca.Id = racaEditarViewModel.Id;
+            raca.Nome = racaEditarViewModel. Nome.Trim();
+            raca.Especie = racaEditarViewModel.Especie;
 
             _racasRepositorio.Atualizar(raca);
         }
@@ -38,15 +39,13 @@ namespace Entra21.CSharp.ClinicaVeterinaria.Servico
             return raca;
         }
 
-        public void Cadastrar(string nome, string especie)
+        public void Cadastrar(RacaCadastrarViewModel racaCadastrarViewModel)
         {
             var raca = new Raca();
-            raca.Nome = nome;
-            raca.Especie = especie;
+            raca.Nome = racaCadastrarViewModel.Nome;
+            raca.Especie = racaCadastrarViewModel.Especie;
 
             _racasRepositorio.Cadastrar(raca);
-
-            Console.WriteLine($"Nome: {nome} Espécie: {especie}");
         }
 
         public List<Raca> ObterTodos()
