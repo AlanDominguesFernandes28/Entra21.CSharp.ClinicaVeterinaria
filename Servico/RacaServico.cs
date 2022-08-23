@@ -1,42 +1,35 @@
 ﻿using Entra21.CSharp.ClinicaVeterinaria.Repositorio;
 using Entra21.CSharp.ClinicaVeterinaria.Repositorio.BancoDados;
 using Entra21.CSharp.ClinicaVeterinaria.Repositorio.Entidades;
-using Entra21.CSharp.ClinicaVeterinaria.Servico.ViewModel;
+using Entra21.CSharp.ClinicaVeterinaria.Servico.ViewModels;
 
 namespace Entra21.CSharp.ClinicaVeterinaria.Servico
 {
-    // A classe RacaServico irá implementar a interface IRacaServico,
-    // ou seja, deverá honrar as clausulas definidos no interface(contrato)
+        /* A classe RacaServico irá implementar a interface IRacaService,
+         ou seja, deverá honrar as clausulas definidos na interface (contrato) */
+
     public class RacaServico : IRacaServico
     {
-        private IRacaRepositorio _racasRepositorio;
+        private readonly IRacaRepositorio _racaRepositorio;
 
-        // Construtor: Construir de racaServiço com o minimo para a correta execução
         public RacaServico(ClinicaVeterinariaContexto contexto)
         {
-            _racasRepositorio = new RacaRepositorio(contexto);
+            _racaRepositorio = new RacaRepositorio(contexto);
         }
 
         public void Editar(RacaEditarViewModel racaEditarViewModel)
         {
             var raca = new Raca();
             raca.Id = racaEditarViewModel.Id;
-            raca.Nome = racaEditarViewModel. Nome.Trim();
+            raca.Nome = racaEditarViewModel.Nome.Trim();
             raca.Especie = racaEditarViewModel.Especie;
 
-            _racasRepositorio.Atualizar(raca);
+            _racaRepositorio.Atualizar(raca);
         }
 
         public void Apagar(int id)
         {
-            _racasRepositorio.Apagar(id);
-        }
-
-        public Raca ObterPorId(int id)
-        {
-            var raca = _racasRepositorio.ObterPorId(id);
-
-            return raca;
+            _racaRepositorio.Apagar(id);
         }
 
         public void Cadastrar(RacaCadastrarViewModel racaCadastrarViewModel)
@@ -45,12 +38,19 @@ namespace Entra21.CSharp.ClinicaVeterinaria.Servico
             raca.Nome = racaCadastrarViewModel.Nome;
             raca.Especie = racaCadastrarViewModel.Especie;
 
-            _racasRepositorio.Cadastrar(raca);
+            _racaRepositorio.Cadastrar(raca);
+        }
+
+        public Raca ObterPorId(int id)
+        {
+            var raca = _racaRepositorio.ObterPorId(id);
+
+            return raca;
         }
 
         public List<Raca> ObterTodos()
         {
-            var racasDoBanco = _racasRepositorio.ObterTodos();
+            var racasDoBanco = _racaRepositorio.ObterTodos();
 
             return racasDoBanco;
         }

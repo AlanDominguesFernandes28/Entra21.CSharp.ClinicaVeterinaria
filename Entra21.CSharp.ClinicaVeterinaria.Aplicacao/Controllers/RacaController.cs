@@ -1,25 +1,26 @@
 ﻿using Entra21.CSharp.ClinicaVeterinaria.Repositorio.BancoDados;
 using Entra21.CSharp.ClinicaVeterinaria.Repositorio.Enuns;
 using Entra21.CSharp.ClinicaVeterinaria.Servico;
-using Entra21.CSharp.ClinicaVeterinaria.Servico.ViewModel;
+using Entra21.CSharp.ClinicaVeterinaria.Servico.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Entra21.CSharp.ClinicaVeterinaria.Aplicacao.Controllers
 {
-    // Dois pontos Herança(mais para frente)
+    // Dois pontos mais pra frente é sobre Herença
     public class RacaController : Controller
     {
         private readonly IRacaServico _racaServico;
 
-        // Construtor: objetivo contruir o objeto de RacaController,
-        // com o minimo necessario para o funcionamento correto
+        /* Construtor: objetivo - construir o objeto de RacaController,
+         com o mínimo necessário para o funcionamento correto */
+
         public RacaController(ClinicaVeterinariaContexto contexto)
         {
             _racaServico = new RacaServico(contexto);
         }
 
         /// <summary>
-        /// Endpoint que permite listar todas as raças
+        /// Endpoint que permite lista todas as raças
         /// </summary>
         /// <returns>Retorna a página html com as raças</returns>
         [HttpGet("/raca")]
@@ -27,62 +28,85 @@ namespace Entra21.CSharp.ClinicaVeterinaria.Aplicacao.Controllers
         {
             var racas = _racaServico.ObterTodos();
 
-            //Passar informação do C# para HTML
-            ViewBag.Racas = racas;
 
-            return View("Index");
+            return View("Index", racas);
         }
-        [HttpGet("/raca/cadastrar")]
 
+        [HttpGet("/raca/cadastrar")]
         public IActionResult Cadastrar()
         {
             var especies = ObterEspecies();
+
             ViewBag.Especies = especies;
+
+            var racaCadastrarViewModel = new RacaCadastrarViewModel();
+
             return View();
         }
-        [HttpPost("/raca/cadastrar")]
+
+        [HttpPost("/raca/Cadastrar")]
         public IActionResult Cadastrar(
             [FromForm] RacaCadastrarViewModel racaCadastrarViewModel)
         {
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Especies = ObterEspecies();
+
+                return View(racaCadastrarViewModel);
+            }
 
             _racaServico.Cadastrar(racaCadastrarViewModel);
 
             return RedirectToAction("Index");
         }
-       
-        [HttpGet("/raca/apagar/")]
-        // https://localhost:porta/raca/apagar?id=4
-        public IActionResult Apagar([FromQuery]int id)
+
+        [HttpGet("/raca/apagar")]
+        // http://local:host:porta/raca/apagar?id=4
+        public IActionResult Apagar([FromQuery] int id)
         {
             _racaServico.Apagar(id);
 
             return RedirectToAction("Index");
         }
-        [HttpGet("/raca/editar")]
 
-        public  IActionResult Editar([FromForm]  RacaEditarViewModel racaEditarViewModel )
+        [HttpGet("raca/editar")]
+        public IActionResult Editar([FromQuery] int id)
         {
-            _racaServico.Editar(racaEditarViewModel);
-            return RedirectToAction("Index");
+            var raca = _racaServico.ObterPorId(id);
+            var especies = ObterEspecies();
 
+            var racaEditarViewModel = new RacaEditarViewModel
+            {
+                Id = raca.Id,
+                Nome = raca.Nome,
+                Especie = raca.Especie
+            };
 
-            
+            ViewBag.Especies = especies;
 
+            return View(racaEditarViewModel);
         }
-        [HttpPost("/raca/editar")]
-       
 
-        public IActionResult Editar( ///todo ver depois
+        [HttpPost("/raca/editar")]
+        public IActionResult Editar(
             [FromForm] RacaEditarViewModel racaEditarViewModel)
         {
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Especies = ObterEspecies();
+                return View(racaEditarViewModel);
+            }
+
             _racaServico.Editar(racaEditarViewModel);
 
             return RedirectToAction("Index");
         }
 
-        private static List<string> ObterEspecies()
+        private List<string> ObterEspecies()
         {
-            return Enum.GetNames<Especie>().OrderBy(x => x).ToList();
+            return Enum.GetNames<Especie>()
+                            .OrderBy(x => x)
+                            .ToList();
         }
     }
 }
